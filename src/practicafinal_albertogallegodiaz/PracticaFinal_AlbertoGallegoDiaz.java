@@ -13,31 +13,17 @@ import java.util.Scanner;
  */
 public class PracticaFinal_AlbertoGallegoDiaz {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        new PracticaFinal_AlbertoGallegoDiaz().inicio();
-    }
 
     private LT tec;
     private int opcion;
     private Juego juego;
     private Registro reg;
 
-    package practicafinal_albertogallegodiaz ;
-
-    public class PracticaFinal_AlbertoGallegoDiaz {
 
         public static void main(String[] args) {
             new PracticaFinal_AlbertoGallegoDiaz().inicio();
         }
-
-        private LT tec;
-        private char opcion;
-        private Juego juego;
-        private Registro reg;
-
+        
         private void inicio() {
             tec = new LT();
 
@@ -117,7 +103,7 @@ public class PracticaFinal_AlbertoGallegoDiaz {
 
             } while (opcion != 's');
         }
-    }
+    
 
     private char[] pedirDatos() {
         char[] nombreJ;
