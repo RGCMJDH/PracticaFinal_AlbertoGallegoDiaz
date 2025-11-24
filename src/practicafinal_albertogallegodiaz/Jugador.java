@@ -11,10 +11,10 @@ package practicafinal_albertogallegodiaz;
 public class Jugador {
 
     //datos
-    private char[] nombre;
+    private Cadena nombre;
     private int puntos;
 
-    public Jugador(char[] nombre, int puntos) {
+    public Jugador(Cadena nombre, int puntos) {
         this.nombre = nombre;
         this.puntos = puntos;
     }

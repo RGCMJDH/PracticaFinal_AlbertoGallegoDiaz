@@ -29,7 +29,7 @@ public class Cadena {
     }
 
     public Cadena(char[] p) {
-        //pal = new char[llarginicial];
+        pal = new char[llarginicial];
         ind = 0;
         pal = p;
     }
