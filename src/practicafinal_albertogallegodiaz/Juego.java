@@ -11,17 +11,22 @@ package practicafinal_albertogallegodiaz;
 public class Juego {
 
     private int opc;
-
-    public Juego() {
-
+    private int rondas;
+    
+    
+    
+    public Juego(int rondas) {
+        this.rondas = rondas;
+        
     }
 
-    public void logicaJuego(int rondas) {
+    public void logicaJuegoCPU(Jugador j1) {
         opc = 0;
-
+        Jugador CPU = new Jugador("CPU".toCharArray(), 0);
+        
         while (opc != rondas) {//Juego letras
             if (opc % 2 == 0) {
-                
+                jugarPalabras(j1,CPU);
             }else{//Juego numeros
                 
             }
@@ -29,4 +34,17 @@ public class Juego {
             opc++;
         }
     }
+    
+    
+    private void jugarPalabras(Jugador j1, Jugador j2){
+       
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 }

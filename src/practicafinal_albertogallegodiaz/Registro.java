@@ -10,6 +10,16 @@ package practicafinal_albertogallegodiaz;
  */
 public class Registro {
     
-    //FO fi = new FO("registro.txt");
+    private FO fo;
     
+    public Registro(){
+    
+    }
+    
+    public void guardarInfo(Cadena c){
+        fo = new FO(new Cadena("registro.txt".toCharArray()));
+        fo.obrir(true); // No sobreescribe
+        fo.gravarLinia(c);
+        fo.tancar();
+    }
 }
