@@ -46,13 +46,13 @@ public class FI {
         Cadena cad = null;
         if (res != null) {
             cad = new Cadena();
-            for(int i=0;i<res.length;i++) {
+            for (int i = 0; i < res.length; i++) {
                 cad.posar(res[i]);
             }
         }
         return cad;
     }
-    
+
     public char[] llegirLiniaArray() {
         char[] res = null;
         try {
@@ -66,7 +66,6 @@ public class FI {
         return res;
     }
 
-    
     public void tancar() {
         try {
             reader.close();

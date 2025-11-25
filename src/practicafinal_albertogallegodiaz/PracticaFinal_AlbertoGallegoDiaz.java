@@ -106,17 +106,15 @@ public class PracticaFinal_AlbertoGallegoDiaz {
 
     private Cadena pedirDatos() {
         Cadena nombreJ;
-        System.out.println("    Cuantas rondas quieres jugar?");
+        System.out.println("");
+        System.out.println("Cuantas rondas quieres jugar?");
         int rondas = tec.llegirSencer();
         juego = new Juego(rondas);
-        System.out.println("    Dame tu nombre");
+        System.out.println("Dame tu nombre");
         return nombreJ = new Cadena(tec.llegirLiniaC());
 
     }
 
-    private void jugarSolo(int rondas) {
-
-    }
 
 //    private void Estadisticas() {
 //        FI fi = new FI(new Cadena("registro.txt".toCharArray()));

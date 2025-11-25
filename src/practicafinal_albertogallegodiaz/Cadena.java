@@ -39,20 +39,6 @@ public class Cadena {
         return pal;
     }
 
-    public void ponerSeparador() {
-        if (ind == pal.length) {
-            char[] aux = new char[pal.length + 5];
-            for (int i = 0; i < pal.length; i++) {
-                aux[i + 1] = pal[i];
-            }
-            pal = aux;
-        }
-        pal[0] = '#';
-        ind++;
-        pal[ind++] = '#';
-        //System.out.println("ind: " + ind);
-    }
-
     public void posar(char c) {
         if (ind == pal.length) {
             char[] aux = new char[pal.length + 1];
@@ -100,7 +86,22 @@ public class Cadena {
         }
         return res;
     }
-
+    
+    public boolean sonIguales(Cadena p){
+        boolean igual = true;
+        if (pal.length != p.getPal().length) {
+            return false;
+        }
+        
+        for (int i = 0; i < pal.length; i++) {
+            if (p.getPal()[i] != pal[i]) {
+                return false;
+            }
+        }
+        
+        return igual;
+    }
+    
     @Override
     public String toString() {
         String res = "";

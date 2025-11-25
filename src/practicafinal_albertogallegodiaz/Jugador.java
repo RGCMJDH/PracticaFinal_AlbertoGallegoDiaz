@@ -18,4 +18,22 @@ public class Jugador {
         this.nombre = nombre;
         this.puntos = puntos;
     }
+
+    public void setNombre(Cadena nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
+    public Cadena getNombre() {
+        return nombre;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+    
+    
 }
