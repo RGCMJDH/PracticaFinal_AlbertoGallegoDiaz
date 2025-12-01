@@ -29,9 +29,11 @@ public class Cadena {
     }
 
     public Cadena(char[] p) {
-        pal = new char[llarginicial];
-        ind = 0;
-        pal = p;
+        pal = new char[p.length];
+        for (int i = 0; i < p.length; i++) {
+            pal[i] = p[i];
+        }
+        ind = p.length;
     }
 
     //////////////////////////////////////////////////////
@@ -50,7 +52,7 @@ public class Cadena {
 
         pal[ind++] = c;
     }
-    
+
     public char getPrimer() {
         return pal[0];
     }
@@ -86,22 +88,21 @@ public class Cadena {
         }
         return res;
     }
-    
-    public boolean sonIguales(Cadena p){
-        boolean igual = true;
-        if (pal.length != p.getPal().length) {
+
+    public boolean sonIguales(Cadena p) {
+        if (this.getTam() != p.getTam()) {
             return false;
         }
-        
-        for (int i = 0; i < pal.length; i++) {
-            if (p.getPal()[i] != pal[i]) {
+
+        for (int i = 0; i < this.getTam(); i++) {
+            if (this.pal[i] != p.get(i)) {
                 return false;
             }
         }
-        
-        return igual;
+
+        return true;
     }
-    
+
     @Override
     public String toString() {
         String res = "";

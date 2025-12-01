@@ -48,8 +48,7 @@ public class PracticaFinal_AlbertoGallegoDiaz {
                     switch (opcionJugar) {
                         case '1':
                             System.out.println("Jugar contra el ordenador");
-                            
-                            
+                                                        
                             Jugador j1 = new Jugador(pedirDatos(), 0);
                             juego.logicaJuegoCPU(j1);
                             break;
