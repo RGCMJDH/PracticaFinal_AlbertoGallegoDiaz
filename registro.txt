@@ -539,3 +539,23 @@ Puntuación acumulada albert: 3
 Puntuación acumulada CPU: 3
 De momento hay empate
 --- Ronda 2
+############################
+# Partida de a l b e r t  vs CPU
+--- Ronda 1
+Letras de la ronda: i z a n a f 
+Palabra de albert: i z a n  (4 puntos)
+Palabra de CPU: f i a n z a  (6 puntos)
+Puntos albert (ronda): 4
+Puntos CPU (ronda): 6
+Ganador de la ronda: CPU
+Puntuación acumulada albert: 4
+Puntuación acumulada CPU: 6
+Va ganando la CPU
+--- Ronda 2
+Puntuación acumulada albert: 4
+Puntuación acumulada CPU: 6
+Va ganando la CPU
+Resultado final albert: 4 puntos
+Resultado final CPU: 6 puntos
+Ganador final: CPU
+############################
