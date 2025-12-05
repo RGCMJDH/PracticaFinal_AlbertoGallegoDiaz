@@ -76,7 +76,8 @@ public class PracticaFinal_AlbertoGallegoDiaz {
                     switch (opcionRegistro) {
                         case '1':
                             System.out.println("Mostrar resultados de las partidas");
-                            // llamada al registro
+                            reg = new Registro();
+                            reg.leerEstadisticasGenerales();
                             break;
                         case '2':
                             System.out.println("Mostrar estadísticas de un jugador");
@@ -91,7 +92,7 @@ public class PracticaFinal_AlbertoGallegoDiaz {
                     break;
 
                 case 's':
-                    System.out.println("Saliendo del programa...");
+                    System.out.println("Saliendo del programa");
                     break;
 
                 default:
