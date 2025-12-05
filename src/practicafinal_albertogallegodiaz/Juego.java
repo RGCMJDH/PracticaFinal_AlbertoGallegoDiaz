@@ -115,7 +115,7 @@ public class Juego {
         System.out.print("Dame otro numero del array: ");
         int n2 = tec.llegirSencer();
         
-        while (!perteneceNum(n1, numeros) && n1 != n2) {
+        while (!perteneceNum(n2, numeros) && n1 != n2) {
             System.err.println("El numero no pertenece al array... Dame otro");
             n1 = tec.llegirSencer();
         }
@@ -145,12 +145,13 @@ public class Juego {
     private int[] numerosAleatorios() {
         fi = new FI(new Cadena("files/cifras.txt".toCharArray()));
         fi.obrir();
-        char[] opciones = fi.llegirLiniaArray();
+        int[] opciones = fi.leerInts();
+        //System.out.println(imprimeArray(opciones)); Coge lo que toca y lo imprime bien
         fi.tancar();
-        
+                
         int[] creados = new int[20];
         for (int i = 0; i < 6; i++) {
-            creados[i] = (int) opciones[rar.nextInt(opciones.length)];
+            creados[i] = opciones[rar.nextInt(opciones.length)];
         }
         return creados;
     }

@@ -53,6 +53,74 @@ public class FI {
         return cad;
     }
 
+    public int[] leerInts() {
+    int[] res = new int[0];
+
+    try {
+        String fr = reader.readLine();
+        if (fr == null) {
+            return res;
+        }
+
+        // Permitido por el enunciado
+        char[] linea = fr.toCharArray();
+
+        // 1) Contar cuántos números hay
+        int count = 0;
+        boolean inNum = false;
+
+        for (int i = 0; i < linea.length; i++) {
+            char c = linea[i];
+            boolean esDigito = (c >= '0' && c <= '9');
+
+            if (esDigito) {
+                if (!inNum) {
+                    count++;
+                    inNum = true;
+                }
+            } else {
+                inNum = false;
+            }
+        }
+
+        // 2) Crear array resultado
+        res = new int[count];
+
+        // 3) Parsear números (incluye 10, 25, 50, 75, 100)
+        int idx = 0;
+        int valor = 0;
+        inNum = false;
+
+        for (int i = 0; i < linea.length; i++) {
+            char c = linea[i];
+            boolean esDigito = (c >= '0' && c <= '9');
+
+            if (esDigito) {
+                valor = valor * 10 + (c - '0');
+                inNum = true;
+            } else {
+                if (inNum) {
+                    res[idx] = valor;
+                    idx++;
+                    valor = 0;
+                    inNum = false;
+                }
+            }
+        }
+
+        // Si la línea acaba en número sin separador
+        if (inNum && idx < res.length) {
+            res[idx] = valor;
+        }
+
+    } catch (Exception ex) {
+        Logger.getLogger(FI.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    return res;
+}
+
+
     public char[] llegirLiniaArray() {
         char[] res = null;
         try {

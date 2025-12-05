@@ -445,3 +445,97 @@ Resultado final qa: 0 puntos
 Resultado final CPU: 4 puntos
 Ganador final: CPU
 ############################
+############################
+# Partida de 1  vs CPU
+--- Ronda 1
+Letras de la ronda: i a 
+Palabra de 1 NO válida: 
+Palabra de CPU: a i  (2 puntos)
+Puntos 1 (ronda): 0
+Puntos CPU (ronda): 2
+Ganador de la ronda: CPU
+Puntuación acumulada 1: 0
+Puntuación acumulada CPU: 2
+Va ganando la CPU
+Resultado final 1: 0 puntos
+Resultado final CPU: 2 puntos
+Ganador final: CPU
+############################
+############################
+# Partida de a l b e r  vs CPU
+--- Ronda 1
+Letras de la ronda: o p g 
+Palabra de alber: o p  (2 puntos)
+Palabra de CPU: g o p  (3 puntos)
+Puntos alber (ronda): 2
+Puntos CPU (ronda): 3
+Ganador de la ronda: CPU
+Puntuación acumulada alber: 2
+Puntuación acumulada CPU: 3
+Va ganando la CPU
+--- Ronda 2
+############################
+# Partida de 2  vs CPU
+--- Ronda 1
+Letras de la ronda: e p j i 
+Palabra de 2 NO válida: j e p i 
+Palabra de CPU: p e i  (3 puntos)
+Puntos 2 (ronda): 0
+Puntos CPU (ronda): 3
+Ganador de la ronda: CPU
+Puntuación acumulada 2: 0
+Puntuación acumulada CPU: 3
+Va ganando la CPU
+--- Ronda 2
+############################
+# Partida de a l  vs CPU
+--- Ronda 1
+Letras de la ronda: a q 
+Palabra de al: a  (1 puntos)
+Palabra de CPU: a  (1 puntos)
+Puntos al (ronda): 1
+Puntos CPU (ronda): 1
+Ronda empatada
+Puntuación acumulada al: 1
+Puntuación acumulada CPU: 1
+De momento hay empate
+--- Ronda 2
+############################
+# Partida de a l b e r t  vs CPU
+--- Ronda 1
+Letras de la ronda: g n i a e 
+Palabra de albert: g e n i a  (5 puntos)
+Palabra de CPU: a n e g i  (5 puntos)
+Puntos albert (ronda): 5
+Puntos CPU (ronda): 5
+Ronda empatada
+Puntuación acumulada albert: 5
+Puntuación acumulada CPU: 5
+De momento hay empate
+--- Ronda 2
+Puntuación acumulada albert: 5
+Puntuación acumulada CPU: 5
+De momento hay empate
+Resultado final albert: 5 puntos
+Resultado final CPU: 5 puntos
+La partida ha terminado en EMPATE
+############################
+############################
+# Partida de a l b e r t  vs CPU
+--- Ronda 1
+############################
+# Partida de a l b e r  vs CPU
+--- Ronda 1
+############################
+# Partida de a l b e r t  vs CPU
+--- Ronda 1
+Letras de la ronda: e z f c c t j 
+Palabra de albert: e t c  (3 puntos)
+Palabra de CPU: c t e  (3 puntos)
+Puntos albert (ronda): 3
+Puntos CPU (ronda): 3
+Ronda empatada
+Puntuación acumulada albert: 3
+Puntuación acumulada CPU: 3
+De momento hay empate
+--- Ronda 2
