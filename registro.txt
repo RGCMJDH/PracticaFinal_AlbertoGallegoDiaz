@@ -539,3 +539,67 @@ Puntuación acumulada albert: 3
 Puntuación acumulada CPU: 3
 De momento hay empate
 --- Ronda 2
+############################
+# Partida de a l v e r  vs CPU
+--- Ronda 1
+Letras de la ronda: w v w l r v m t 
+Palabra de alver: m t  (2 puntos)
+Palabra de CPU: m t v  (3 puntos)
+Puntos alver (ronda): 2
+Puntos CPU (ronda): 3
+Ganador de la ronda: CPU
+Puntuación acumulada alver: 2
+Puntuación acumulada CPU: 3
+Va ganando la CPU
+--- Ronda 2
+############################
+# Partida de l o l a  vs CPU
+--- Ronda 1
+Idioma elegido no válido en esta ronda
+Puntuación acumulada lola: 0
+Puntuación acumulada CPU: 0
+De momento hay empate
+--- Ronda 2
+Puntuación acumulada lola: 0
+Puntuación acumulada CPU: 0
+De momento hay empate
+Resultado final lola: 0 puntos
+Resultado final CPU: 0 puntos
+La partida ha terminado en EMPATE
+############################
+############################
+# Partida de 1  vs CPU
+--- Ronda 1
+Letras de la ronda: e u t i p s d e 
+Palabra de 1: p e t e  (4 puntos)
+Palabra de CPU: d e s p i t e u  (8 puntos)
+Puntos 1 (ronda): 4
+Puntos CPU (ronda): 8
+Ganador de la ronda: CPU
+Puntuación acumulada 1: 4
+Puntuación acumulada CPU: 8
+Va ganando la CPU
+Resultado final 1: 4 puntos
+Resultado final CPU: 8 puntos
+Ganador final: CPU
+############################
+############################
+# Partida de a l b e r t  vs CPU
+--- Ronda 1
+Letras de la ronda: d d i n u e d 
+Palabra de albert NO válida: d i n e u 
+Palabra de CPU: d u d e n  (5 puntos)
+Puntos albert (ronda): 0
+Puntos CPU (ronda): 5
+Ganador de la ronda: CPU
+Puntuación acumulada albert: 0
+Puntuación acumulada CPU: 5
+Va ganando la CPU
+--- Ronda 2
+Puntuación acumulada albert: 0
+Puntuación acumulada CPU: 5
+Va ganando la CPU
+Resultado final albert: 0 puntos
+Resultado final CPU: 5 puntos
+Ganador final: CPU
+############################

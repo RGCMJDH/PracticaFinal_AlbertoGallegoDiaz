@@ -104,23 +104,43 @@ public class Juego {
         String res = imprimeArrayN(numeros);
         System.out.println(res);
 
-        System.out.print("Dame un numero del array: ");
-        int n1 = tec.llegirSencer();
-        
-        while (!perteneceNum(n1, numeros)) {
-            System.err.println("El numero no pertenece al array... Dame otro");
-            n1 = tec.llegirSencer();
-        }
-        
-        System.out.print("Dame otro numero del array: ");
-        int n2 = tec.llegirSencer();
-        
-        while (!perteneceNum(n2, numeros) && n1 != n2) {
-            System.err.println("El numero no pertenece al array... Dame otro");
-            n1 = tec.llegirSencer();
+        System.out.println("Comienza el juego");
+        while (true) {
+            System.out.println("num = -1, para acabar la partida");
+
+            System.out.print("Dame un numero del array: ");
+            int n1 = tec.llegirSencer();
+            if (n1 == -1) {
+                break;
+            }
+
+            while (!perteneceNum(n1, numeros) || n1 == 0) {
+                System.err.println("El numero no pertenece al array... Dame otro");
+                n1 = tec.llegirSencer();
+            }
+
+            System.out.print("Dame otro numero del array: ");
+            int n2 = tec.llegirSencer();
+
+            while (!perteneceNum(n2, numeros) || n1 == n2 || n2 == 0) {
+                System.err.println("El numero no pertenece al array... Dame otro");
+                n2 = tec.llegirSencer();
+            }
+            
+            // Una vez hecha las comprobaciones
+            
+
         }
 
-
+    }
+    
+    private void quitar(int[] p, int quitar, int quitar2, int añadir){
+        for (int i = 0; i < p.length; i++) {
+            if (p[i] == quitar || p[i] == quitar2) {
+                p[i] = 0;
+            }
+        }
+        
     }
 
     private boolean perteneceNum(int n, int[] numeros) {
@@ -145,14 +165,58 @@ public class Juego {
     private int[] numerosAleatorios() {
         fi = new FI(new Cadena("files/cifras.txt".toCharArray()));
         fi.obrir();
-        int[] opciones = fi.leerInts();
-        //System.out.println(imprimeArray(opciones)); Coge lo que toca y lo imprime bien
+        char[] linea = fi.llegirLiniaArray();
         fi.tancar();
-                
+
+        // 1) Contar cuántos números hay
+        int count = 0;
+        boolean inNum = false;
+
+        for (int i = 0; i < linea.length; i++) {
+            char c = linea[i];
+            boolean esDigito = (c >= '0' && c <= '9');
+
+            if (esDigito) {
+                if (!inNum) {
+                    count++;
+                    inNum = true;
+                }
+            } else {
+                inNum = false;
+            }
+        }
+
+        // 2) Parsear números usando ASCII
+        int[] opciones = new int[count];
+        int idx = 0;
+        int valor = 0;
+        inNum = false;
+
+        for (int i = 0; i < linea.length; i++) {
+            char c = linea[i];
+            boolean esDigito = (c >= '0' && c <= '9');
+
+            if (esDigito) {
+                valor = valor * 10 + (c - '0'); // <- ASCII aquí
+                inNum = true;
+            } else if (inNum) {
+                opciones[idx++] = valor;
+                valor = 0;
+                inNum = false;
+            }
+        }
+
+        // Por si la línea acaba en número
+        if (inNum) {
+            opciones[idx] = valor;
+        }
+
+        // 3) Elegir 6 números al azar
         int[] creados = new int[20];
         for (int i = 0; i < 6; i++) {
             creados[i] = opciones[rar.nextInt(opciones.length)];
         }
+
         return creados;
     }
 
