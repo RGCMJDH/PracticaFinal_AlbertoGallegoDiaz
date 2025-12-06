@@ -4,11 +4,11 @@
  */
 package practicafinal_albertogallegodiaz;
 
+import java.util.Date;
 import java.util.Random;
 
 public class Juego {
 
-    private Registro reg;
     private int opc;
     private int rondas;
     private FI fi;
@@ -17,9 +17,11 @@ public class Juego {
     private Jugador j1;
     private Jugador j2;
     private Jugador CPU = new Jugador(new Cadena("CPU".toCharArray()), 0);
+    private Registro reg = new Registro();
+    private char[] vsCPU = "vs cpu".toCharArray();
+    private char[] vsHumano = "vs humano".toCharArray();
 
     public Juego(int rondas) {
-        reg = new Registro();
         this.rondas = rondas;
     }
 
@@ -29,67 +31,30 @@ public class Juego {
 
         int totalJugador = 0;
         int totalCPU = 0;
-
-        // Cabecera de la partida en el registro
-        reg.guardarInfo(new Cadena("############################".toCharArray()));
-        reg.guardarInfo(new Cadena(("# Partida de " + imprimeArray(j1.getNombre().getPal()) + " vs CPU").toCharArray()));
+        Date inicio = new Date();
 
         while (opc != rondas) {
-            int numRonda = opc + 1;
-
-            // Marcamos el inicio de la ronda en el registro
-            reg.guardarInfo(new Cadena(("--- Ronda " + numRonda).toCharArray()));
 
             // Reseteo de puntos de ronda
             j1.setPuntos(0);
             CPU.setPuntos(0);
 
             if (opc % 2 == 0) {
-                // PAR -> juego de letras
                 System.out.println(" - PALABRAS ");
                 jugarPalabras(j1, CPU);
             } else {
-                // IMPAR -> juego de números
                 System.out.println(" - NUMEROS");
                 jugarNumeros(j1, CPU);
             }
 
-            // Sumamos puntuaciones de la ronda actual a los totales
             totalJugador += j1.getPuntos();
             totalCPU += CPU.getPuntos();
-
-            // Guardamos puntuación acumulada en el registro
-            reg.guardarInfo(new Cadena(("Puntuación acumulada " + imprimeNombre(j1.getNombre().getPal()) + ": " + totalJugador).toCharArray()));
-            reg.guardarInfo(new Cadena(("Puntuación acumulada CPU: " + totalCPU).toCharArray()));
-
-            // Quién va ganando tras esta ronda
-            String ganadorParcial;
-            if (totalJugador > totalCPU) {
-                ganadorParcial = "Va ganando " + imprimeArray(j1.getNombre().getPal());
-            } else if (totalCPU > totalJugador) {
-                ganadorParcial = "Va ganando la CPU";
-            } else {
-                ganadorParcial = "De momento hay empate";
-            }
-            reg.guardarInfo(new Cadena(ganadorParcial.toCharArray()));
 
             opc++;
         }
 
-        // Resultado final de la partida
-        reg.guardarInfo(new Cadena(("Resultado final " + imprimeNombre(j1.getNombre().getPal()) + ": " + totalJugador + " puntos").toCharArray()));
-        reg.guardarInfo(new Cadena(("Resultado final CPU: " + totalCPU + " puntos").toCharArray()));
-
-        String ganadorFinal;
-        if (totalJugador > totalCPU) {
-            ganadorFinal = "Ganador final: " + imprimeNombre(j1.getNombre().getPal());
-        } else if (totalCPU > totalJugador) {
-            ganadorFinal = "Ganador final: CPU";
-        } else {
-            ganadorFinal = "La partida ha terminado en EMPATE";
-        }
-        reg.guardarInfo(new Cadena(ganadorFinal.toCharArray()));
-        reg.guardarInfo(new Cadena("############################".toCharArray()));
+        reg.guardarPartida(inicio, vsCPU, j1.getNombre().getPal(), CPU.getNombre().getPal(),
+                rondas, totalJugador, totalCPU);
     }
 
     private void jugarNumeros(Jugador j1, Jugador j2) {
@@ -107,6 +72,9 @@ public class Juego {
         System.out.println("Comienza el juego");
 
         while (true) {
+
+         
+
             System.out.println("num = -1, para acabar la partida");
 
             System.out.print("Dame un numero del array: ");
@@ -120,30 +88,127 @@ public class Juego {
                 n1 = tec.llegirSencer();
             }
 
+            System.out.println("Que operacion quieres hacer");
+            System.out.print(" +, -, *, / :");
+            char opc = tec.llegirCaracter();
+
+            while (opc != '+' && opc != '-' && opc != '*' && opc != '/') {
+                System.err.println("Operacion no valida");
+                opc = tec.llegirCaracter();
+            }
+
             System.out.print("Dame otro numero del array: ");
             int n2 = tec.llegirSencer();
 
-            while (!perteneceNum(n2, numeros) || n1 == n2 || n2 == 0) {
+            // Permitir n1 == n2 solo si hay al menos 2 apariciones
+            while (!perteneceNum(n2, numeros) || n2 == 0 ||
+                   (n1 == n2 && cuentaNum(n1, numeros) < 2)) {
                 System.err.println("El numero no pertenece al array... Dame otro");
                 n2 = tec.llegirSencer();
             }
 
-            // Una vez hecha las comprobaciones
+            int resultado = 0;
+            switch (opc) {
+                case '+':
+                    resultado = n1 + n2;
+                    break;
 
+                case '-':
+                    if (!operacion(n1, opc, n2)) {
+                        System.out.println("No valida");
+                        resultado = 0;
+                    } else {
+                        resultado = n1 - n2;
+                    }
+                    break;
+
+                case '*':
+                    resultado = n1 * n2;
+                    break;
+
+                case '/':
+                    if (!operacion(n1, opc, n2)) {
+                        System.out.println("No valida");
+                        resultado = 0;
+                    } else {
+                        resultado = n1 / n2;
+                    }
+                    break;
+
+                default:
+                    System.out.println("Operacion no valida");
+                    resultado = 0;
+                    break;
+            }
+
+            quitar(numeros, n1, n2, resultado);
+
+            // Imprimir cambios tras la operación
+            res = imprimeArrayN(numeros);
+            System.out.println(res);
+        }
+    }
+
+    private boolean operacion(int n1, char op, int n2) {
+        switch (op) {
+            case '+':
+                return true;
+
+            case '-':
+                return (n1 - n2) >= 0;
+
+            case '*':
+                return true;
+
+            case '/':
+                return n1 >= n2 && (n1 % n2 == 0);
+
+            default:
+                return false;
         }
     }
 
     private void quitar(int[] p, int quitar1, int quitar2, int anadir) {
-        for (int i = 0; i < p.length; i++) {
-            if (p[i] == quitar1 || p[i] == quitar2) {
-                p[i] = 0;
+
+        // Quitar UNA ocurrencia de cada número (o DOS si son iguales)
+        if (quitar1 == quitar2) {
+            int quitadas = 0;
+            for (int i = 0; i < p.length && quitadas < 2; i++) {
+                if (p[i] == quitar1) {
+                    p[i] = 0;
+                    quitadas++;
+                }
+            }
+        } else {
+            boolean q1 = false, q2 = false;
+
+            for (int i = 0; i < p.length; i++) {
+                if (!q1 && p[i] == quitar1) {
+                    p[i] = 0;
+                    q1 = true;
+                } else if (!q2 && p[i] == quitar2) {
+                    p[i] = 0;
+                    q2 = true;
+                }
+
+                if (q1 && q2) {
+                    break;
+                }
             }
         }
 
-        for (int i = 0; i < p.length; i++) {
-            if (p[i] == 0) {
-                p[i] = anadir;
-                break;
+        // Añadir el resultado al FINAL (después del último no-cero)
+        if (anadir != 0) {
+            int last = -1;
+
+            for (int i = 0; i < p.length; i++) {
+                if (p[i] != 0) {
+                    last = i;
+                }
+            }
+
+            if (last + 1 < p.length) {
+                p[last + 1] = anadir;
             }
         }
     }
@@ -196,7 +261,6 @@ public class Juego {
             opciones[idx] = valor;
         }
 
-        // 3) Elegir 6 números al azar
         int[] creados = new int[20];
         for (int i = 0; i < 6; i++) {
             creados[i] = opciones[rar.nextInt(opciones.length)];
@@ -213,6 +277,16 @@ public class Juego {
             }
         }
         return esta;
+    }
+
+    private int cuentaNum(int n, int[] numeros) {
+        int c = 0;
+        for (int i = 0; i < numeros.length; i++) {
+            if (numeros[i] == n) {
+                c++;
+            }
+        }
+        return c;
     }
 
     private String imprimeArrayN(int[] p) {
@@ -249,16 +323,12 @@ public class Juego {
                 break;
             default:
                 System.out.println("Opción no válida");
-                reg.guardarInfo(new Cadena("Idioma elegido no válido en esta ronda".toCharArray()));
                 return;
         }
 
         char[] letrasEscogidas = devuelveLetras(letras);
         String util = imprimeArray(letrasEscogidas);
         System.out.println(util);
-
-        // Guardamos en el registro las letras de esta ronda
-        reg.guardarInfo(new Cadena(("Letras de la ronda: " + util).toCharArray()));
 
         System.out.println("Dame una palabra que contenga las letras enseñadas");
         char[] creada = tec.llegirLiniaC();
@@ -270,12 +340,9 @@ public class Juego {
             System.out.println("Puntos " + imprimeNombre(nombreJ1) + ": " + creada.length);
             j1.setPuntos(creada.length);
 
-            // Guardamos jugada del jugador
-            reg.guardarInfo(new Cadena(("Palabra de " + imprimeNombre(nombreJ1) + ": " + palabraJugador + " (" + creada.length + " puntos)").toCharArray()));
         } else {
             System.out.println("Palabra errónea");
             System.out.println("");
-            reg.guardarInfo(new Cadena(("Palabra de " + imprimeNombre(nombreJ1) + " NO válida: " + imprimeArray(creada)).toCharArray()));
         }
 
         System.out.println("Turno de la CPU");
@@ -284,7 +351,6 @@ public class Juego {
         if (palabraCPU == null) {
             System.out.println("La CPU no ha encontrado ninguna palabra válida");
             System.out.println("");
-            reg.guardarInfo(new Cadena("La CPU no ha encontrado ninguna palabra válida".toCharArray()));
         } else {
             if (compruebaPalabra(new Cadena(palabraCPU), letrasEscogidas, idioma)) {
                 String palabraCPUString = imprimeArray(palabraCPU);
@@ -292,26 +358,10 @@ public class Juego {
                 System.out.println("Puntos CPU: " + palabraCPU.length);
                 CPU.setPuntos(palabraCPU.length);
 
-                // Guardamos jugada de la CPU
-                reg.guardarInfo(new Cadena(("Palabra de CPU: " + palabraCPUString + " (" + palabraCPU.length + " puntos)").toCharArray()));
             } else {
                 System.out.println("Palabra errónea");
                 System.out.println("");
-                reg.guardarInfo(new Cadena("Palabra propuesta por la CPU NO válida".toCharArray()));
             }
-        }
-
-        // Puntos de la ronda en el registro
-        reg.guardarInfo(new Cadena(("Puntos " + imprimeNombre(nombreJ1) + " (ronda): " + j1.getPuntos()).toCharArray()));
-        reg.guardarInfo(new Cadena(("Puntos CPU (ronda): " + CPU.getPuntos()).toCharArray()));
-
-        // Ganador de la ronda en el registro
-        if (j1.getPuntos() > CPU.getPuntos()) {
-            reg.guardarInfo(new Cadena(("Ganador de la ronda: " + imprimeNombre(nombreJ1)).toCharArray()));
-        } else if (CPU.getPuntos() > j1.getPuntos()) {
-            reg.guardarInfo(new Cadena("Ganador de la ronda: CPU".toCharArray()));
-        } else {
-            reg.guardarInfo(new Cadena("Ronda empatada".toCharArray()));
         }
     }
 

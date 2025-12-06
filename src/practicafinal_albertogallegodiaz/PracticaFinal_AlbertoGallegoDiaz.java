@@ -44,18 +44,31 @@ public class PracticaFinal_AlbertoGallegoDiaz {
                     System.out.println("s) Volver al menú principal");
                     System.out.print("Opción: ");
                     char opcionJugar = tec.llegirCaracter();
-                    
+
                     switch (opcionJugar) {
                         case '1':
                             System.out.println("Jugar contra el ordenador");
-                                                        
+                            System.out.println("");
+                            System.out.println("Cuantas rondas quieres jugar?");
+                            int rondas = tec.llegirSencer();
+                            juego = new Juego(rondas);
                             Jugador j1 = new Jugador(pedirDatos(), 0);
                             juego.logicaJuegoCPU(j1);
                             break;
                         case '2':
                             System.out.println("Jugar contra otro jugador");
-                            // aquí lógica 2 jugadores
+
+                            System.out.println("");
+                            System.out.println("Cuantas rondas quieres jugar?");
+                            rondas = tec.llegirSencer();
+                            juego = new Juego(rondas);
+
+                            j1 = new Jugador(pedirDatos(), 0);
+                            Jugador j2 = new Jugador(pedirDatos(), 0);
+
+                            //llamar al metodo de dos jugadores
                             break;
+
                         case 's':
                             // volver al menú principal
                             break;
@@ -107,14 +120,10 @@ public class PracticaFinal_AlbertoGallegoDiaz {
     private Cadena pedirDatos() {
         Cadena nombreJ;
         System.out.println("");
-        System.out.println("Cuantas rondas quieres jugar?");
-        int rondas = tec.llegirSencer();
-        juego = new Juego(rondas);
         System.out.println("Dame tu nombre");
         return nombreJ = new Cadena(tec.llegirLiniaC());
 
     }
-
 
 //    private void Estadisticas() {
 //        FI fi = new FI(new Cadena("registro.txt".toCharArray()));
