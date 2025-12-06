@@ -603,3 +603,49 @@ Resultado final albert: 0 puntos
 Resultado final CPU: 5 puntos
 Ganador final: CPU
 ############################
+############################
+# Partida de a l b r  vs CPU
+--- Ronda 1
+Letras de la ronda: r f 
+Palabra de albr NO válida: f 
+La CPU no ha encontrado ninguna palabra válida
+Puntos albr (ronda): 0
+Puntos CPU (ronda): 0
+Ronda empatada
+Puntuación acumulada albr: 0
+Puntuación acumulada CPU: 0
+De momento hay empate
+--- Ronda 2
+############################
+# Partida de a l b e r t  vs CPU
+--- Ronda 1
+Letras de la ronda: o i s 
+Palabra de albert: o i s  (3 puntos)
+Palabra de CPU: o i s  (3 puntos)
+Puntos albert (ronda): 3
+Puntos CPU (ronda): 3
+Ronda empatada
+Puntuación acumulada albert: 3
+Puntuación acumulada CPU: 3
+De momento hay empate
+--- Ronda 2
+############################
+# Partida de j u a n  vs CPU
+--- Ronda 1
+Letras de la ronda: m w f n g a s b e i 
+Palabra de juan: m a n  (3 puntos)
+Palabra de CPU: b e a m i n g  (7 puntos)
+Puntos juan (ronda): 3
+Puntos CPU (ronda): 7
+Ganador de la ronda: CPU
+Puntuación acumulada juan: 3
+Puntuación acumulada CPU: 7
+Va ganando la CPU
+--- Ronda 2
+Puntuación acumulada juan: 3
+Puntuación acumulada CPU: 7
+Va ganando la CPU
+Resultado final juan: 3 puntos
+Resultado final CPU: 7 puntos
+Ganador final: CPU
+############################

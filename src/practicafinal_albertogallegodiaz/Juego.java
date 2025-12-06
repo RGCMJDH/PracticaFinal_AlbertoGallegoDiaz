@@ -40,7 +40,7 @@ public class Juego {
             // Marcamos el inicio de la ronda en el registro
             reg.guardarInfo(new Cadena(("--- Ronda " + numRonda).toCharArray()));
 
-            // Reseteo de puntos de ronda (mismos puntos para ambos juegos)
+            // Reseteo de puntos de ronda
             j1.setPuntos(0);
             CPU.setPuntos(0);
 
@@ -49,7 +49,7 @@ public class Juego {
                 System.out.println(" - PALABRAS ");
                 jugarPalabras(j1, CPU);
             } else {
-                // IMPAR -> juego letras
+                // IMPAR -> juego de números
                 System.out.println(" - NUMEROS");
                 jugarNumeros(j1, CPU);
             }
@@ -100,10 +100,12 @@ public class Juego {
         System.out.println("Te dare unos numeros y tu deberas acercarte lo maximo o llegar al siguiente numeros");
         System.out.println("Objetivo " + objetivo);
 
-        char[] numeros = numerosAleatorios();
-        String res = imprimeArray(numeros);
+        int[] numeros = numerosAleatorios();
+        String res = imprimeArrayN(numeros);
         System.out.println(res);
+
         System.out.println("Comienza el juego");
+
         while (true) {
             System.out.println("num = -1, para acabar la partida");
 
@@ -125,58 +127,28 @@ public class Juego {
                 System.err.println("El numero no pertenece al array... Dame otro");
                 n2 = tec.llegirSencer();
             }
-            
+
             // Una vez hecha las comprobaciones
-            
 
         }
-
     }
-    
-    private void quitar(int[] p, int quitar, int quitar2, int añadir){
+
+    private void quitar(int[] p, int quitar1, int quitar2, int anadir) {
         for (int i = 0; i < p.length; i++) {
-            if (p[i] == quitar || p[i] == quitar2) {
+            if (p[i] == quitar1 || p[i] == quitar2) {
                 p[i] = 0;
             }
         }
 
-        System.out.print("Dame un numero del array: ");
-        char n1 = tec.llegirCaracter();
-
-        while (!perteneceNum(n1, numeros)) {
-            System.err.println("El numero no pertenece al array... Dame otro");
-            n1 = tec.llegirCaracter();
-        }
-
-        System.out.print("Dame otro numero del array: ");
-        char n2 = tec.llegirCaracter();
-
-        while (!perteneceNum(n2, numeros) && n1 != n2) {
-            System.err.println("El numero no pertenece al array... Dame otro");
-            n2 = tec.llegirCaracter();
-        }
-    }
-
-    private boolean perteneceNum(int n, int[] numeros) {
-        boolean esta = false;
-        for (int i = 0; i < numeros.length; i++) {
-            if (numeros[i] == n) {
-                return true;
+        for (int i = 0; i < p.length; i++) {
+            if (p[i] == 0) {
+                p[i] = anadir;
+                break;
             }
         }
-
-        return esta;
     }
 
-    private String imprimeArrayN(int[] p) {
-        String res = "";
-        for (int i = 0; i < p.length; i++) {
-            res += p[i] + " ";
-        }
-        return res;
-    }
-
-    private char[] numerosAleatorios() {
+    private int[] numerosAleatorios() {
         fi = new FI(new Cadena("files/cifras.txt".toCharArray()));
         fi.obrir();
         char[] linea = fi.llegirLiniaArray();
@@ -211,7 +183,7 @@ public class Juego {
             boolean esDigito = (c >= '0' && c <= '9');
 
             if (esDigito) {
-                valor = valor * 10 + (c - '0'); // <- ASCII aquí
+                valor = valor * 10 + (c - '0');
                 inNum = true;
             } else if (inNum) {
                 opciones[idx++] = valor;
@@ -220,20 +192,12 @@ public class Juego {
             }
         }
 
-        // Por si la línea acaba en número
-        if (inNum) {
+        if (inNum && idx < opciones.length) {
             opciones[idx] = valor;
         }
 
         // 3) Elegir 6 números al azar
         int[] creados = new int[20];
-=======
-        char[] opciones = fi.llegirLiniaArray();
-        //System.out.println(imprimeArray(opciones)); Coge lo que toca y lo imprime bien
-        fi.tancar();
-
-        char[] creados = new char[20];
->>>>>>> 8952eefc99e7511c5ad0169881520fd8fba97cff
         for (int i = 0; i < 6; i++) {
             creados[i] = opciones[rar.nextInt(opciones.length)];
         }
@@ -241,7 +205,25 @@ public class Juego {
         return creados;
     }
 
-//  --------------------------------------------------
+    private boolean perteneceNum(int n, int[] numeros) {
+        boolean esta = false;
+        for (int i = 0; i < numeros.length; i++) {
+            if (numeros[i] == n) {
+                return true;
+            }
+        }
+        return esta;
+    }
+
+    private String imprimeArrayN(int[] p) {
+        String res = "";
+        for (int i = 0; i < p.length; i++) {
+            res += p[i] + " ";
+        }
+        return res;
+    }
+
+    //  --------------------------------------------------
     private void jugarPalabras(Jugador j1, Jugador j2) {
 
         char[] nombreJ1 = j1.getNombre().getPal();
@@ -334,7 +316,6 @@ public class Juego {
     }
 
     private char[] devuelveLetras(char[] letrasI) {
-        //rar = new Random();
         fi = new FI(new Cadena(letrasI));
         fi.obrir();
 
@@ -367,21 +348,17 @@ public class Juego {
 
     private boolean compruebaPalabra(Cadena palabraCreada, char[] letras, char[] idioma) {
 
-        // 1) Si la palabra es más larga que el número de letras, imposible
         if (palabraCreada.getTam() > letras.length) {
             System.err.println("Palabra demasiado larga");
             return false;
         }
 
-        // 2) Comprobar que se puede formar con 'letras'
         boolean[] usada = new boolean[letras.length];
 
-        // Recorremos cada carácter de la palabra creada
         for (int i = 0; i < palabraCreada.getTam(); i++) {
             char c = palabraCreada.get(i);
             boolean encontrada = false;
 
-            // Buscamos una letra igual en 'letras' que todavía no se haya usado
             for (int j = 0; j < letras.length && !encontrada; j++) {
                 if (!usada[j] && letras[j] == c) {
                     usada[j] = true;
@@ -389,14 +366,12 @@ public class Juego {
                 }
             }
 
-            // Si no hemos encontrado ninguna posición libre con esa letra, no se puede formar
             if (!encontrada) {
                 System.err.println("La palabra no se puede formar con las letras disponibles");
                 return false;
             }
         }
 
-        // 3) Si se puede formar, comprobamos si está en el diccionario
         fi = new FI(new Cadena(idioma));
         fi.obrir();
 
