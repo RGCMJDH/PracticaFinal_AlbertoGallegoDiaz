@@ -100,10 +100,9 @@ public class Juego {
         System.out.println("Te dare unos numeros y tu deberas acercarte lo maximo o llegar al siguiente numeros");
         System.out.println("Objetivo " + objetivo);
 
-        int[] numeros = numerosAleatorios();
-        String res = imprimeArrayN(numeros);
+        char[] numeros = numerosAleatorios();
+        String res = imprimeArray(numeros);
         System.out.println(res);
-
         System.out.println("Comienza el juego");
         while (true) {
             System.out.println("num = -1, para acabar la partida");
@@ -140,7 +139,22 @@ public class Juego {
                 p[i] = 0;
             }
         }
-        
+
+        System.out.print("Dame un numero del array: ");
+        char n1 = tec.llegirCaracter();
+
+        while (!perteneceNum(n1, numeros)) {
+            System.err.println("El numero no pertenece al array... Dame otro");
+            n1 = tec.llegirCaracter();
+        }
+
+        System.out.print("Dame otro numero del array: ");
+        char n2 = tec.llegirCaracter();
+
+        while (!perteneceNum(n2, numeros) && n1 != n2) {
+            System.err.println("El numero no pertenece al array... Dame otro");
+            n2 = tec.llegirCaracter();
+        }
     }
 
     private boolean perteneceNum(int n, int[] numeros) {
@@ -162,7 +176,7 @@ public class Juego {
         return res;
     }
 
-    private int[] numerosAleatorios() {
+    private char[] numerosAleatorios() {
         fi = new FI(new Cadena("files/cifras.txt".toCharArray()));
         fi.obrir();
         char[] linea = fi.llegirLiniaArray();
@@ -213,6 +227,13 @@ public class Juego {
 
         // 3) Elegir 6 números al azar
         int[] creados = new int[20];
+=======
+        char[] opciones = fi.llegirLiniaArray();
+        //System.out.println(imprimeArray(opciones)); Coge lo que toca y lo imprime bien
+        fi.tancar();
+
+        char[] creados = new char[20];
+>>>>>>> 8952eefc99e7511c5ad0169881520fd8fba97cff
         for (int i = 0; i < 6; i++) {
             creados[i] = opciones[rar.nextInt(opciones.length)];
         }
