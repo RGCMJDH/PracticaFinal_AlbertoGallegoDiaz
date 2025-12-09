@@ -46,7 +46,7 @@ public class Registro {
 
         long ts = 0;
         if (tiempoP != null) {
-            ts = tiempoP.getTime() / 1000; // timestamp en segundos
+            ts = tiempoP.getTime() / 1000;
         }
         String tipo = new String(tipoP);
         String j1 = new String(nJ1);

@@ -65,8 +65,8 @@ public class PracticaFinal_AlbertoGallegoDiaz {
 
                             j1 = new Jugador(pedirDatos(), 0);
                             Jugador j2 = new Jugador(pedirDatos(), 0);
-
-                            //llamar al metodo de dos jugadores
+                            
+                            juego.logicaJuegoJJ(j1, j2);
                             break;
 
                         case 's':

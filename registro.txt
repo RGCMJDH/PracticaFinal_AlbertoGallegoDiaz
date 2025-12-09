@@ -1,3 +1,9 @@
 1765022046#vs cpu#albert#CPU#2#2#2
 1765022145#vs cpu#albert#CPU#3#8#14
 1765024158#vs cpu#jua#CPU#2#0#8
+1765193527#vs cpu#pdro#CPU#2#4#8
+1765276180#vs cpu#gt#CPU#2#0#3
+1765276245#vs cpu#pepe#CPU#2#5#2
+1765277712#vs cpu#albert#CPU#2#5#8
+1765278621#vs humano#albert#pepe#2#1#1
+1765279133#vs humano#albert#albert2#2#8#10

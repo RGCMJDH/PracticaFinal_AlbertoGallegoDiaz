@@ -25,6 +25,44 @@ public class Juego {
         this.rondas = rondas;
     }
 
+    // --------------------------------------------------
+    //  MODO 2 JUGADORES
+    // --------------------------------------------------
+    public void logicaJuegoJJ(Jugador j1, Jugador j2) {
+        this.j1 = j1;
+        this.j2 = j2;
+        opc = 0;
+
+        int totalJugador1 = 0;
+        int totalJugador2 = 0;
+        Date inicio = new Date();
+
+        while (opc != rondas) {
+
+            j1.setPuntos(0);
+            j2.setPuntos(0);
+
+            if (opc % 2 == 0) {
+                System.out.println(" - PALABRAS ");
+                jugarPalabrasJJ(j1, j2);
+            } else {
+                System.out.println(" - NUMEROS");
+                jugarNumerosJJ(j1, j2);
+            }
+
+            totalJugador1 += j1.getPuntos();
+            totalJugador2 += j2.getPuntos();
+
+            opc++;
+        }
+
+        reg.guardarPartida(inicio, vsHumano, j1.getNombre().getPal(), j2.getNombre().getPal(),
+                rondas, totalJugador1, totalJugador2);
+    }
+
+    // --------------------------------------------------
+    //  MODO VS CPU
+    // --------------------------------------------------
     public void logicaJuegoCPU(Jugador j1) {
         this.j1 = j1;
         opc = 0;
@@ -35,7 +73,6 @@ public class Juego {
 
         while (opc != rondas) {
 
-            // Reseteo de puntos de ronda
             j1.setPuntos(0);
             CPU.setPuntos(0);
 
@@ -57,120 +94,337 @@ public class Juego {
                 rondas, totalJugador, totalCPU);
     }
 
+    // ==================================================
+    //  CIFRAS VS CPU (tu lógica + consola más limpia)
+    // ==================================================
     private void jugarNumeros(Jugador j1, Jugador j2) {
-        char[] nombreJ1 = j1.getNombre().getPal();
-        char[] nombreCPU = CPU.getNombre().getPal();
 
         int objetivo = rar.nextInt(100, 999);
-        System.out.println("Te dare unos numeros y tu deberas acercarte lo maximo o llegar al siguiente numeros");
-        System.out.println("Objetivo " + objetivo);
+        System.out.println("Objetivo: " + objetivo);
 
-        int[] numeros = numerosAleatorios();
-        String res = imprimeArrayN(numeros);
-        System.out.println(res);
+        int[] base = numerosAleatorios();
+        System.out.println("Números: " + imprimeArrayN(base));
+        System.out.println("Turno jugador (-1 para acabar)");
 
-        System.out.println("Comienza el juego");
+        int[] numerosJ = copiaArray(base);
+        int[] numerosC = copiaArray(base);
 
+        // -------- TURNO JUGADOR --------
         while (true) {
 
-         
-
-            System.out.println("num = -1, para acabar la partida");
-
-            System.out.print("Dame un numero del array: ");
+            System.out.println("Objetivo: " + objetivo);
+            System.out.print("n1: ");
             int n1 = tec.llegirSencer();
             if (n1 == -1) {
+                System.out.println("Fin turno jugador.");
                 break;
             }
 
-            while (!perteneceNum(n1, numeros) || n1 == 0) {
-                System.err.println("El numero no pertenece al array... Dame otro");
+            while (!perteneceNum(n1, numerosJ) || n1 == 0) {
+                System.err.print("n1 inválido: ");
                 n1 = tec.llegirSencer();
             }
 
-            System.out.println("Que operacion quieres hacer");
-            System.out.print(" +, -, *, / :");
-            char opc = tec.llegirCaracter();
-
-            while (opc != '+' && opc != '-' && opc != '*' && opc != '/') {
-                System.err.println("Operacion no valida");
-                opc = tec.llegirCaracter();
+            System.out.print("op: ");
+            char op = tec.llegirCaracter();
+            while (op != '+' && op != '-' && op != '*' && op != '/') {
+                System.err.print("op inválida: ");
+                op = tec.llegirCaracter();
             }
 
-            System.out.print("Dame otro numero del array: ");
+            System.out.print("n2: ");
             int n2 = tec.llegirSencer();
 
-            // Permitir n1 == n2 solo si hay al menos 2 apariciones
-            while (!perteneceNum(n2, numeros) || n2 == 0 ||
-                   (n1 == n2 && cuentaNum(n1, numeros) < 2)) {
-                System.err.println("El numero no pertenece al array... Dame otro");
+            while (!perteneceNum(n2, numerosJ) || n2 == 0
+                    || (n1 == n2 && cuentaNum(n1, numerosJ) < 2)) {
+                System.err.print("n2 inválido: ");
                 n2 = tec.llegirSencer();
             }
 
-            int resultado = 0;
-            switch (opc) {
+            int res = 0;
+            boolean ok = true;
+
+            switch (op) {
                 case '+':
-                    resultado = n1 + n2;
+                    res = n1 + n2;
+                    quitar(numerosJ, n1, n2, res);
                     break;
-
                 case '-':
-                    if (!operacion(n1, opc, n2)) {
-                        System.out.println("No valida");
-                        resultado = 0;
-                    } else {
-                        resultado = n1 - n2;
+                    if (!operacion(n1, op, n2)) ok = false;
+                    else {
+                        res = n1 - n2;
+                        quitar(numerosJ, n1, n2, res);
                     }
                     break;
-
                 case '*':
-                    resultado = n1 * n2;
+                    res = n1 * n2;
+                    quitar(numerosJ, n1, n2, res);
                     break;
-
                 case '/':
-                    if (!operacion(n1, opc, n2)) {
-                        System.out.println("No valida");
-                        resultado = 0;
-                    } else {
-                        resultado = n1 / n2;
+                    if (!operacion(n1, op, n2)) ok = false;
+                    else {
+                        res = n1 / n2;
+                        quitar(numerosJ, n1, n2, res);
                     }
-                    break;
-
-                default:
-                    System.out.println("Operacion no valida");
-                    resultado = 0;
                     break;
             }
 
-            quitar(numeros, n1, n2, resultado);
+            if (ok) System.out.println("= " + res);
+            else System.err.println("Operación no válida");
 
-            // Imprimir cambios tras la operación
-            res = imprimeArrayN(numeros);
-            System.out.println(res);
+            System.out.println("Números: " + imprimeArrayN(numerosJ));
         }
+
+        j1.setPuntos(evaluaFinal(numerosJ, objetivo));
+
+        // -------- TURNO CPU --------
+        System.out.println("Turno CPU");
+        jugarNumerosCPUSimple(numerosC, objetivo);
+        j2.setPuntos(evaluaFinalCPU(numerosC, objetivo));
     }
 
+    // ==================================================
+    //  CIFRAS 2 JUGADORES
+    //  - J2 tiene otra secuencia de números
+    //  - Objetivo visible en cada iteración
+    //  - Consola más limpia
+    // ==================================================
+    private void jugarNumerosJJ(Jugador j1, Jugador j2) {
+
+        int objetivo = rar.nextInt(100, 999);
+        System.out.println("Objetivo: " + objetivo);
+
+        int[] numerosJ1 = numerosAleatorios();
+        int[] numerosJ2 = numerosAleatorios();
+
+        System.out.println("Números " + imprimeNombre(j1.getNombre().getPal()) + ": " + imprimeArrayN(numerosJ1));
+        System.out.println("Números " + imprimeNombre(j2.getNombre().getPal()) + ": " + imprimeArrayN(numerosJ2));
+
+        // -------- TURNO J1 --------
+        System.out.println("Turno " + imprimeNombre(j1.getNombre().getPal()) + " (-1 para acabar)");
+
+        while (true) {
+
+            System.out.println("Objetivo: " + objetivo);
+            System.out.print("n1: ");
+            int n1 = tec.llegirSencer();
+            if (n1 == -1) break;
+
+            while (!perteneceNum(n1, numerosJ1) || n1 == 0) {
+                System.err.print("n1 inválido: ");
+                n1 = tec.llegirSencer();
+            }
+
+            System.out.print("op: ");
+            char op = tec.llegirCaracter();
+            while (op != '+' && op != '-' && op != '*' && op != '/') {
+                System.err.print("op inválida: ");
+                op = tec.llegirCaracter();
+            }
+
+            System.out.print("n2: ");
+            int n2 = tec.llegirSencer();
+
+            while (!perteneceNum(n2, numerosJ1) || n2 == 0
+                    || (n1 == n2 && cuentaNum(n1, numerosJ1) < 2)) {
+                System.err.print("n2 inválido: ");
+                n2 = tec.llegirSencer();
+            }
+
+            int res = 0;
+            boolean ok = true;
+
+            switch (op) {
+                case '+':
+                    res = n1 + n2;
+                    quitar(numerosJ1, n1, n2, res);
+                    break;
+                case '-':
+                    if (!operacion(n1, op, n2)) ok = false;
+                    else {
+                        res = n1 - n2;
+                        quitar(numerosJ1, n1, n2, res);
+                    }
+                    break;
+                case '*':
+                    res = n1 * n2;
+                    quitar(numerosJ1, n1, n2, res);
+                    break;
+                case '/':
+                    if (!operacion(n1, op, n2)) ok = false;
+                    else {
+                        res = n1 / n2;
+                        quitar(numerosJ1, n1, n2, res);
+                    }
+                    break;
+            }
+
+            if (ok) System.out.println("= " + res);
+            else System.err.println("Operación no válida");
+
+            System.out.println("Números: " + imprimeArrayN(numerosJ1));
+        }
+
+        j1.setPuntos(evaluaFinal(numerosJ1, objetivo));
+
+        // -------- TURNO J2 --------
+        System.out.println("Turno " + imprimeNombre(j2.getNombre().getPal()) + " (-1 para acabar)");
+
+        while (true) {
+
+            System.out.println("Objetivo: " + objetivo);
+            System.out.print("n1: ");
+            int n1 = tec.llegirSencer();
+            if (n1 == -1) break;
+
+            while (!perteneceNum(n1, numerosJ2) || n1 == 0) {
+                System.err.print("n1 inválido: ");
+                n1 = tec.llegirSencer();
+            }
+
+            System.out.print("op: ");
+            char op = tec.llegirCaracter();
+            while (op != '+' && op != '-' && op != '*' && op != '/') {
+                System.err.print("op inválida: ");
+                op = tec.llegirCaracter();
+            }
+
+            System.out.print("n2: ");
+            int n2 = tec.llegirSencer();
+
+            while (!perteneceNum(n2, numerosJ2) || n2 == 0
+                    || (n1 == n2 && cuentaNum(n1, numerosJ2) < 2)) {
+                System.err.print("n2 inválido: ");
+                n2 = tec.llegirSencer();
+            }
+
+            int res = 0;
+            boolean ok = true;
+
+            switch (op) {
+                case '+':
+                    res = n1 + n2;
+                    quitar(numerosJ2, n1, n2, res);
+                    break;
+                case '-':
+                    if (!operacion(n1, op, n2)) ok = false;
+                    else {
+                        res = n1 - n2;
+                        quitar(numerosJ2, n1, n2, res);
+                    }
+                    break;
+                case '*':
+                    res = n1 * n2;
+                    quitar(numerosJ2, n1, n2, res);
+                    break;
+                case '/':
+                    if (!operacion(n1, op, n2)) ok = false;
+                    else {
+                        res = n1 / n2;
+                        quitar(numerosJ2, n1, n2, res);
+                    }
+                    break;
+            }
+
+            if (ok) System.out.println("= " + res);
+            else System.err.println("Operación no válida");
+
+            System.out.println("Números: " + imprimeArrayN(numerosJ2));
+        }
+
+        j2.setPuntos(evaluaFinal(numerosJ2, objetivo));
+    }
+
+    // ==================================================
+    //  EVALUACIÓN FINAL HUMANO
+    // ==================================================
+    private int evaluaFinal(int[] numeros, int objetivo) {
+        int resultado = 0;
+
+        System.out.print("Elige tu resultado final: ");
+        int temp = tec.llegirSencer();
+
+        boolean esta = perteneceNum(temp, numeros);
+
+        if (esta && temp != 0) {
+            int dif = Math.abs(objetivo - temp);
+
+            if (dif == 0) resultado = 10;
+            else if (dif <= 5) resultado = 7;
+            else if (dif <= 10) resultado = 5;
+            else if (dif <= 25) resultado = 3;
+            else if (dif <= 50) resultado = 1;
+            else resultado = 0;
+
+            System.out.println("Puntos: " + resultado);
+        } else {
+            System.err.println("Número no válido.");
+            resultado = 0;
+        }
+
+        return resultado;
+    }
+
+    // ==================================================
+    //  EVALUACIÓN FINAL CPU
+    // ==================================================
+    private int evaluaFinalCPU(int[] numeros, int objetivo) {
+
+        int elegido = 0;
+        int mejorDif = Integer.MAX_VALUE;
+
+        for (int i = 0; i < numeros.length; i++) {
+            int n = numeros[i];
+
+            if (n != 0) {
+                int dif = Math.abs(objetivo - n);
+
+                if (dif < mejorDif) {
+                    mejorDif = dif;
+                    elegido = n;
+                }
+            }
+        }
+
+        int resultado;
+        if (elegido == 0) {
+            resultado = 0;
+        } else {
+            if (mejorDif == 0) resultado = 10;
+            else if (mejorDif <= 5) resultado = 7;
+            else if (mejorDif <= 10) resultado = 5;
+            else if (mejorDif <= 25) resultado = 3;
+            else if (mejorDif <= 50) resultado = 1;
+            else resultado = 0;
+        }
+
+        System.out.println("CPU elige: " + elegido + " | Puntos: " + resultado);
+        return resultado;
+    }
+
+    // ==================================================
+    //  REGLAS OPERACIONES
+    // ==================================================
     private boolean operacion(int n1, char op, int n2) {
         switch (op) {
             case '+':
                 return true;
-
             case '-':
                 return (n1 - n2) >= 0;
-
             case '*':
                 return true;
-
             case '/':
                 return n1 >= n2 && (n1 % n2 == 0);
-
             default:
                 return false;
         }
     }
 
+    // ==================================================
+    //  QUITAR / AÑADIR EN ARRAY
+    // ==================================================
     private void quitar(int[] p, int quitar1, int quitar2, int anadir) {
 
-        // Quitar UNA ocurrencia de cada número (o DOS si son iguales)
         if (quitar1 == quitar2) {
             int quitadas = 0;
             for (int i = 0; i < p.length && quitadas < 2; i++) {
@@ -191,15 +445,12 @@ public class Juego {
                     q2 = true;
                 }
 
-                if (q1 && q2) {
-                    break;
-                }
+                if (q1 && q2) break;
             }
         }
 
-        // Añadir el resultado al FINAL (después del último no-cero)
         if (anadir != 0) {
-            int last = -1;
+            int last = 0;
 
             for (int i = 0; i < p.length; i++) {
                 if (p[i] != 0) {
@@ -213,13 +464,15 @@ public class Juego {
         }
     }
 
+    // ==================================================
+    //  GENERAR NÚMEROS
+    // ==================================================
     private int[] numerosAleatorios() {
         fi = new FI(new Cadena("files/cifras.txt".toCharArray()));
         fi.obrir();
         char[] linea = fi.llegirLiniaArray();
         fi.tancar();
 
-        // 1) Contar cuántos números hay
         int count = 0;
         boolean inNum = false;
 
@@ -237,7 +490,6 @@ public class Juego {
             }
         }
 
-        // 2) Parsear números usando ASCII
         int[] opciones = new int[count];
         int idx = 0;
         int valor = 0;
@@ -270,21 +522,16 @@ public class Juego {
     }
 
     private boolean perteneceNum(int n, int[] numeros) {
-        boolean esta = false;
         for (int i = 0; i < numeros.length; i++) {
-            if (numeros[i] == n) {
-                return true;
-            }
+            if (numeros[i] == n) return true;
         }
-        return esta;
+        return false;
     }
 
     private int cuentaNum(int n, int[] numeros) {
         int c = 0;
         for (int i = 0; i < numeros.length; i++) {
-            if (numeros[i] == n) {
-                c++;
-            }
+            if (numeros[i] == n) c++;
         }
         return c;
     }
@@ -297,11 +544,71 @@ public class Juego {
         return res;
     }
 
-    //  --------------------------------------------------
+    private int[] copiaArray(int[] p) {
+        int[] c = new int[p.length];
+        for (int i = 0; i < p.length; i++) {
+            c[i] = p[i];
+        }
+        return c;
+    }
+
+    // ==================================================
+    //  CPU CIFRAS SIMPLE (1 jugada)
+    // ==================================================
+    private void jugarNumerosCPUSimple(int[] numeros, int objetivo) {
+
+        int intentosMax = 100;
+
+        for (int intento = 0; intento < intentosMax; intento++) {
+
+            int n1 = elegirNoCero(numeros);
+            int n2 = elegirNoCero(numeros);
+
+            if (n1 == 0 || n2 == 0) return;
+
+            if (n1 == n2 && cuentaNum(n1, numeros) < 2) {
+                continue;
+            }
+
+            char[] ops = {'+', '-', '*', '/'};
+            char op = ops[rar.nextInt(ops.length)];
+
+            if ((op == '-' || op == '/') && !operacion(n1, op, n2)) {
+                continue;
+            }
+
+            int res = 0;
+            switch (op) {
+                case '+': res = n1 + n2; break;
+                case '-': res = n1 - n2; break;
+                case '*': res = n1 * n2; break;
+                case '/': res = n1 / n2; break;
+            }
+
+            quitar(numeros, n1, n2, res);
+
+            System.out.println("CPU: " + n1 + " " + op + " " + n2 + " = " + res);
+            System.out.println("Números CPU: " + imprimeArrayN(numeros));
+            return;
+        }
+
+        System.out.println("CPU no encuentra jugada válida.");
+    }
+
+    private int elegirNoCero(int[] numeros) {
+        for (int i = 0; i < 50; i++) {
+            int v = numeros[rar.nextInt(numeros.length)];
+            if (v != 0) return v;
+        }
+        return 0;
+    }
+
+    // ==================================================
+    //  LETRAS VS CPU (tu método original)
+    // ==================================================
     private void jugarPalabras(Jugador j1, Jugador j2) {
 
         char[] nombreJ1 = j1.getNombre().getPal();
-        char[] nombreCPU = CPU.getNombre().getPal();
 
         System.out.println("Idioma??");
         System.out.println("Catalan: (1), Castellano: (2), Ingles: (3)");
@@ -327,19 +634,14 @@ public class Juego {
         }
 
         char[] letrasEscogidas = devuelveLetras(letras);
-        String util = imprimeArray(letrasEscogidas);
-        System.out.println(util);
+        System.out.println(imprimeArray(letrasEscogidas));
 
-        System.out.println("Dame una palabra que contenga las letras enseñadas");
+        System.out.println("Palabra: ");
         char[] creada = tec.llegirLiniaC();
 
-        String palabraJugador = "";
         if (compruebaPalabra(new Cadena(creada), letrasEscogidas, idioma)) {
-            palabraJugador = imprimeArray(creada);
-            System.out.println(palabraJugador);
             System.out.println("Puntos " + imprimeNombre(nombreJ1) + ": " + creada.length);
             j1.setPuntos(creada.length);
-
         } else {
             System.out.println("Palabra errónea");
             System.out.println("");
@@ -353,11 +655,9 @@ public class Juego {
             System.out.println("");
         } else {
             if (compruebaPalabra(new Cadena(palabraCPU), letrasEscogidas, idioma)) {
-                String palabraCPUString = imprimeArray(palabraCPU);
-                System.out.println(palabraCPUString);
+                System.out.println(imprimeArray(palabraCPU));
                 System.out.println("Puntos CPU: " + palabraCPU.length);
                 CPU.setPuntos(palabraCPU.length);
-
             } else {
                 System.out.println("Palabra errónea");
                 System.out.println("");
@@ -365,6 +665,65 @@ public class Juego {
         }
     }
 
+    // ==================================================
+    //  LETRAS 2 JUGADORES
+    //  - J2 tiene otra secuencia de letras
+    //  - Consola más limpia
+    // ==================================================
+    private void jugarPalabrasJJ(Jugador j1, Jugador j2) {
+
+        System.out.println("Idioma (1 CA, 2 ES, 3 EN): ");
+        int opc = tec.llegirSencer();
+        char[] idioma = null, letras = null;
+
+        switch (opc) {
+            case 1:
+                idioma = "files/dic_ca.txt".toCharArray();
+                letras = "files/letras_ca.txt".toCharArray();
+                break;
+            case 2:
+                idioma = "files/dic_es.txt".toCharArray();
+                letras = "files/letras_es.txt".toCharArray();
+                break;
+            case 3:
+                idioma = "files/dic_en.txt".toCharArray();
+                letras = "files/letras_en.txt".toCharArray();
+                break;
+            default:
+                System.out.println("Opción no válida");
+                return;
+        }
+
+        // -------- J1 letras --------
+        char[] letrasJ1 = devuelveLetras(letras);
+        System.out.println("Letras " + imprimeNombre(j1.getNombre().getPal()) + ": " + imprimeArray(letrasJ1));
+        System.out.print("Palabra: ");
+        char[] creada1 = tec.llegirLiniaC();
+
+        if (compruebaPalabra(new Cadena(creada1), letrasJ1, idioma)) {
+            j1.setPuntos(creada1.length);
+            System.out.println("Puntos " + imprimeNombre(j1.getNombre().getPal()) + ": " + creada1.length);
+        } else {
+            System.out.println("Palabra errónea");
+        }
+
+        // -------- J2 letras (DISTINTAS) --------
+        char[] letrasJ2 = devuelveLetras(letras);
+        System.out.println("Letras " + imprimeNombre(j2.getNombre().getPal()) + ": " + imprimeArray(letrasJ2));
+        System.out.print("Palabra: ");
+        char[] creada2 = tec.llegirLiniaC();
+
+        if (compruebaPalabra(new Cadena(creada2), letrasJ2, idioma)) {
+            j2.setPuntos(creada2.length);
+            System.out.println("Puntos " + imprimeNombre(j2.getNombre().getPal()) + ": " + creada2.length);
+        } else {
+            System.out.println("Palabra errónea");
+        }
+    }
+
+    // ==================================================
+    //  SOPORTE LETRAS (tus métodos)
+    // ==================================================
     private char[] devuelveLetras(char[] letrasI) {
         fi = new FI(new Cadena(letrasI));
         fi.obrir();
@@ -485,5 +844,4 @@ public class Juego {
         fi.tancar();
         return mejor;
     }
-
 }
